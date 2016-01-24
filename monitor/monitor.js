@@ -182,13 +182,13 @@ Monitor.prototype.persistEntry = function(dbconfig, emitter, entry, feed) {
 
         if (err) { return handleError(err); }
 
-        client.query('SELECT * FROM entries WHERE id = $1', [entry.guid], function(err, result) {
+        client.query('SELECT * FROM entries WHERE id = $1', [entry.link], function(err, result) {
             if (err) { return handleError(err); }
 
             if (result.rows.length) { return done(); }
 
-            client.query('INSERT INTO entries (id, feed, title, date, link) VALUES ($1, $2, $3, $4, $5)',
-                [entry.guid, feed, entry.title, entry.date, entry.link], function(err, result) {
+            client.query('INSERT INTO entries (id, feed, title, description, image_url, date, link) VALUES ($1, $2, $3, $4, $5, $6, $7)',
+                [entry.link, feed, entry.title, entry.description, entry.image.url, entry.date, entry.link], function(err, result) {
 
                 if (err) { return handleError(err); }
 
